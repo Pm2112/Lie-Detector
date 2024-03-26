@@ -48,6 +48,6 @@ public class MoveBackgroundNav : MonoBehaviour
         textimage1.gameObject.SetActive(false);
         textimage2.gameObject.SetActive(false);
         textimage3.gameObject.SetActive(true);
-
+        camerra.gameObject.SetActive(true);
     }
 }

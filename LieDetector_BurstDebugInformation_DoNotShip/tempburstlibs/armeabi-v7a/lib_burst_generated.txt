@@ -12,8 +12,8 @@ Library: D:\Project\Unity\Lie Detector\Temp\BurstOutput\tempburstlibs\armeabi-v7
 --assembly-defines=Assembly-CSharp;
 --assembly-defines=Unity.2D.IK.Runtime;
 --assembly-defines=NativeGallery.Runtime;
---assembly-defines=Unity.Burst;
 --assembly-defines=NativeCamera.Runtime;
+--assembly-defines=Unity.Burst;
 --assembly-defines=Unity.VisualScripting.Core;
 --assembly-defines=Unity.2D.Animation.Runtime;
 --assembly-defines=Unity.2D.Tilemap.Extras;
