@@ -1,44 +1,54 @@
 ﻿using UnityEngine;
+using UnityEngine.UI; // Để sử dụng UI components như Button
+using UnityEngine.Events; // Để sử dụng UnityEvent
 using System.Collections;
 
-public class CameraPermissionCheck : MonoBehaviour
+
+public class CameraPermissionRequester : MonoBehaviour
 {
+    public Button requestPermissionButton; // Tham chiếu đến Button từ Inspector
+
+    // Khởi tạo UnityEvent để có thể thêm các response trong Inspector
+    public UnityEvent onPermissionGranted;
+    public UnityEvent onPermissionDenied;
+    public UnityEvent onPermissionDeniedAndDontAskAgain;
+
     void Start()
     {
-        StartCoroutine(CheckCameraPermissionCoroutine());
+        // Gán sự kiện cho button
+        if (requestPermissionButton != null)
+        {
+            requestPermissionButton.onClick.AddListener(RequestCameraPermission);
+        }
     }
 
-    IEnumerator CheckCameraPermissionCoroutine()
+    public void RequestCameraPermission()
     {
-        // Kiểm tra quyền camera
-        var permissionCheck = NativeGallery.CheckPermission();
+        StartCoroutine(RequestCameraPermissionCoroutine());
+    }
 
-        // Nếu chưa được cấp quyền hoặc cần hỏi, thì yêu cầu quyền
-        if (permissionCheck == NativeGallery.Permission.ShouldAsk)
+    private IEnumerator RequestCameraPermissionCoroutine()
+    {
+        // Yêu cầu quyền camera
+        NativeCamera.Permission permission = NativeCamera.RequestPermission(false);
+
+        while (permission == NativeCamera.Permission.ShouldAsk)
         {
-            NativeGallery.RequestPermission();
+            // Chờ quyền được người dùng phản hồi
+            yield return null;
+            permission = NativeCamera.CheckPermission(false);
         }
 
-        // Đợi cho đến khi người dùng phản hồi
-        while (NativeGallery.CheckPermission() == NativeGallery.Permission.ShouldAsk)
+        // Xử lý tùy thuộc vào quyền đã được cấp hay không
+        if (permission == NativeCamera.Permission.Granted)
         {
-            yield return new WaitForSeconds(0.1f);
+            Debug.Log("Camera permission granted");
+            onPermissionGranted?.Invoke();
         }
-
-        // Kiểm tra lại sau khi có phản hồi
-        permissionCheck = NativeGallery.CheckPermission();
-
-        if (permissionCheck == NativeGallery.Permission.Denied)
+        else if (permission == NativeCamera.Permission.Denied)
         {
-            Debug.Log("Camera permission was denied by the user.");
-        }
-        else if (permissionCheck == NativeGallery.Permission.Granted)
-        {
-            Debug.Log("Camera permission granted.");
-        }
-        else
-        {
-            Debug.Log("Camera permission is not determined.");
+            Debug.Log("Camera permission denied");
+            onPermissionDenied?.Invoke();
         }
     }
 }
