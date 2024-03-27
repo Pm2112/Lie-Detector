@@ -15,7 +15,6 @@ public class Btn_User : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
     public Image errosImage; // Thêm tham chiếu này
     public GameObject messagePanel; // Thêm tham chiếu này
 
-
     private void Update()
     {
         if (isButton1Pressed && isButton2Pressed)
@@ -89,7 +88,7 @@ public class Btn_User : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
     {
         // Hàm xử lý khi thả button
         errosImage.gameObject.SetActive(false); // Ẩn Image
-        BothButtonsHeld(); // Gọi hàm này để kiểm tra kết quả test xong xóa
+        //BothButtonsHeld(); // Gọi hàm này để kiểm tra kết quả test xong xóa
     }
 
     void BothButtonsHeld()
