@@ -689,7 +689,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c8e9e2ec1107a9341bafe6cf197f74de, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  requiredHoldTime: 10
+  requiredHoldTime: 5
   panel: {fileID: 1415228436}
   screen2: {fileID: 731680363}
 --- !u!1 &131305528
