@@ -4,10 +4,10 @@ using UnityEngine.UI;
 public class CameraToTexture : MonoBehaviour
 {
     public RawImage rawImage;
+    public AspectRatioFitter aspectRatioFitter;
 
     void Start()
     {
-        // Tìm camera trước
         string frontCamName = GetFrontCameraName();
         if (frontCamName == null)
         {
@@ -15,28 +15,27 @@ public class CameraToTexture : MonoBehaviour
             return;
         }
 
-        // Khởi tạo WebCamTexture với camera trước
-        WebCamTexture webCamTexture = new WebCamTexture(frontCamName);
-
-        if (rawImage != null) // Đối với UI
+        WebCamTexture webCamTexture = new WebCamTexture(frontCamName, 1080, 2408);
+        if (rawImage != null)
         {
             rawImage.texture = webCamTexture;
             rawImage.material.mainTexture = webCamTexture;
         }
 
         webCamTexture.Play();
+
+        // Cập nhật tỷ lệ của AspectRatioFitter dựa trên tỷ lệ khung hình của camera
+        aspectRatioFitter.aspectRatio = (float)webCamTexture.width / (float)webCamTexture.height;
     }
 
     void OnDestroy()
     {
-        // Đảm bảo dừng camera khi đối tượng bị hủy
         if (rawImage.texture is WebCamTexture webCamTexture)
         {
             webCamTexture.Stop();
         }
     }
 
-    // Hàm này trả về tên của camera trước nếu có
     string GetFrontCameraName()
     {
         foreach (var device in WebCamTexture.devices)
@@ -46,6 +45,6 @@ public class CameraToTexture : MonoBehaviour
                 return device.name;
             }
         }
-        return null; // Trả về null nếu không tìm thấy camera trước
+        return null;
     }
 }
